@@ -1,17 +1,41 @@
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  LayoutDashboard, User, Calendar, Upload, FileText,
-  BookOpen, Bell, Users, LogOut, GraduationCap
+  LayoutDashboard,
+  User,
+  Calendar,
+  Upload,
+  FileText,
+  BookOpen,
+  Bell,
+  Users,
+  LogOut,
+  GraduationCap,
+  Shield,
 } from "lucide-react";
 import {
-  Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
-  SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton,
-  SidebarMenuItem, SidebarProvider, SidebarRail, SidebarTrigger,
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarRail,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
-  Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
+import { Button } from "../ui/button";
 
 const navItems = [
   { title: "Dashboard", url: "/teacher/dashboard", icon: LayoutDashboard },
@@ -27,7 +51,8 @@ const navItems = [
 const TeacherLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const currentPage = navItems.find((i) => i.url === location.pathname)?.title || "Dashboard";
+  const currentPage =
+    navItems.find((i) => i.url === location.pathname)?.title || "Dashboard";
 
   return (
     <SidebarProvider>
@@ -42,8 +67,12 @@ const TeacherLayout = () => {
                       <GraduationCap className="size-4" />
                     </div>
                     <div className="flex flex-col gap-0.5 leading-none">
-                      <span className="font-display font-semibold">Faculty Portal</span>
-                      <span className="text-xs text-sidebar-foreground/60">Preston Academy</span>
+                      <span className="font-display font-semibold">
+                        Faculty Portal
+                      </span>
+                      <span className="text-xs text-sidebar-foreground/60">
+                        Preston Academy
+                      </span>
                     </div>
                   </Link>
                 </SidebarMenuButton>
@@ -76,7 +105,10 @@ const TeacherLayout = () => {
           <SidebarFooter>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={() => navigate("/login")} tooltip="Sign Out">
+                <SidebarMenuButton
+                  onClick={() => navigate("/login")}
+                  tooltip="Sign Out"
+                >
                   <LogOut />
                   <span>Sign Out</span>
                 </SidebarMenuButton>
@@ -98,8 +130,28 @@ const TeacherLayout = () => {
               </BreadcrumbList>
             </Breadcrumb>
             <div className="ml-auto flex items-center gap-3">
+              <Link to="/student/dashboard">
+                <Button variant="ghost" size="icon">
+                  <LayoutDashboard className="h-5 w-5" />
+                </Button>
+              </Link>
+
+              <Link to="/admin/dashboard">
+                <Button variant="ghost" size="icon">
+                  <Shield className="h-5 w-5" />
+                </Button>
+              </Link>
+
+              {/* teacher dashboard link */}
+              <Link to="/teacher/dashboard">
+                <Button variant="ghost" size="icon">
+                  <GraduationCap className="h-5 w-5" />
+                </Button>
+              </Link>
               <Bell className="h-5 w-5 text-muted-foreground" />
-              <div className="h-8 w-8 rounded-full bg-accent flex items-center justify-center text-accent-foreground text-sm font-bold">T</div>
+              <div className="h-8 w-8 rounded-full bg-accent flex items-center justify-center text-accent-foreground text-sm font-bold">
+                T
+              </div>
             </div>
           </header>
           <main className="flex-1 p-4 md:p-6">
