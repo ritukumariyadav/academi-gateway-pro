@@ -11,6 +11,8 @@ import {
   LogOut,
   GraduationCap,
   Shield,
+  Send,
+  ClipboardList,
 } from "lucide-react";
 import {
   Sidebar,
