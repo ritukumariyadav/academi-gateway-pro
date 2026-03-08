@@ -75,6 +75,7 @@ const MessengerChat: React.FC<MessengerChatProps> = ({
   const [newGroupName, setNewGroupName] = useState("");
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<"all" | "direct" | "groups">("all");
+  const [chatListCollapsed, setChatListCollapsed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const filteredContacts = contacts.filter(c => {
