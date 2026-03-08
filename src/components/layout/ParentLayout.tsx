@@ -1,40 +1,53 @@
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  LayoutDashboard,
-  User,
-  Calendar,
-  FileText,
-  DollarSign,
-  Bell,
-  MessageSquare,
-  LogOut,
-  GraduationCap,
-  Shield,
-  Users,
+  LayoutDashboard, Calendar, FileText, DollarSign, Bell, MessageSquare,
+  LogOut, GraduationCap, Shield, Users, ChevronRight,
 } from "lucide-react";
 import {
-  Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
-  SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton,
-  SidebarMenuItem, SidebarProvider, SidebarRail, SidebarTrigger,
+  Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarInset,
+  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem,
+  SidebarMenuSubButton, SidebarProvider, SidebarRail, SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import { Button } from "../ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LucideIcon } from "lucide-react";
 
-const navItems = [
+interface NavItem { title: string; url: string; icon: LucideIcon; }
+interface NavGroup { label: string; icon: LucideIcon; items: NavItem[]; }
+
+const topNav: NavItem[] = [
   { title: "Dashboard", url: "/parent/dashboard", icon: LayoutDashboard },
-  { title: "Child Progress", url: "/parent/progress", icon: FileText },
-  { title: "Attendance", url: "/parent/attendance", icon: Calendar },
-  { title: "Fees", url: "/parent/fees", icon: DollarSign },
-  { title: "Messages", url: "/parent/messages", icon: MessageSquare },
-  { title: "Complaints", url: "/parent/complaints", icon: Bell },
 ];
+
+const groups: NavGroup[] = [
+  {
+    label: "Child Info",
+    icon: Users,
+    items: [
+      { title: "Child Progress", url: "/parent/progress", icon: FileText },
+      { title: "Attendance", url: "/parent/attendance", icon: Calendar },
+      { title: "Fees", url: "/parent/fees", icon: DollarSign },
+    ],
+  },
+  {
+    label: "Communication",
+    icon: MessageSquare,
+    items: [
+      { title: "Messages", url: "/parent/messages", icon: MessageSquare },
+      { title: "Complaints", url: "/parent/complaints", icon: Bell },
+    ],
+  },
+];
+
+const allNav = [...topNav, ...groups.flatMap(g => g.items)];
 
 const ParentLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const currentPage = navItems.find(i => i.url === location.pathname)?.title || "Dashboard";
+  const currentPage = allNav.find(i => i.url === location.pathname)?.title || "Dashboard";
 
   return (
     <SidebarProvider>
@@ -55,17 +68,47 @@ const ParentLayout = () => {
           </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>
-              <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-              <SidebarGroupContent><SidebarMenu>
-                {navItems.map(item => (
+              <SidebarMenu>
+                {topNav.map(item => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={location.pathname === item.url} tooltip={item.title}>
                       <Link to={item.url}><item.icon /><span>{item.title}</span></Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
-              </SidebarMenu></SidebarGroupContent>
+              </SidebarMenu>
             </SidebarGroup>
+            {groups.map(group => {
+              const isGroupActive = group.items.some(i => location.pathname === i.url);
+              return (
+                <SidebarGroup key={group.label}>
+                  <SidebarMenu>
+                    <Collapsible defaultOpen={isGroupActive} className="group/collapsible">
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton tooltip={group.label}>
+                            <group.icon />
+                            <span>{group.label}</span>
+                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {group.items.map(item => (
+                              <SidebarMenuSubItem key={item.title}>
+                                <SidebarMenuSubButton asChild isActive={location.pathname === item.url}>
+                                  <Link to={item.url}><item.icon /><span>{item.title}</span></Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  </SidebarMenu>
+                </SidebarGroup>
+              );
+            })}
           </SidebarContent>
           <SidebarFooter>
             <SidebarMenu><SidebarMenuItem>

@@ -3,69 +3,109 @@ import {
   LayoutDashboard, Users, BookOpen, List, ClipboardList, Bell, Calendar, FileText,
   DollarSign, Settings, LogOut, GraduationCap, Image, Shield, Briefcase, Home,
   Bus, Package, Library, BarChart3, ScrollText, MessageSquare, Monitor, Award,
+  ChevronRight,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton,
-  SidebarMenuItem, SidebarProvider, SidebarRail, SidebarTrigger,
+  SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem, SidebarMenuSubButton,
+  SidebarProvider, SidebarRail, SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import { Button } from "../ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LucideIcon } from "lucide-react";
 
-const mainNav = [
+interface NavItem {
+  title: string;
+  url: string;
+  icon: LucideIcon;
+}
+
+interface NavGroup {
+  label: string;
+  icon: LucideIcon;
+  items: NavItem[];
+}
+
+const topNav: NavItem[] = [
   { title: "Dashboard", url: "/admin/dashboard", icon: LayoutDashboard },
-  { title: "Students", url: "/admin/students", icon: Users },
-  { title: "Teachers", url: "/admin/teachers", icon: Users },
-  { title: "Courses", url: "/admin/courses", icon: BookOpen },
-  { title: "Departments", url: "/admin/departments", icon: List },
-  { title: "Classes & Sections", url: "/admin/classes", icon: Users },
-  { title: "Subject Mapping", url: "/admin/subject-mapping", icon: BookOpen },
-  { title: "Admissions", url: "/admin/admissions", icon: ClipboardList },
 ];
 
-const academicNav = [
-  { title: "Exams", url: "/admin/exams", icon: Calendar },
-  { title: "Marksheets", url: "/admin/marksheets", icon: ClipboardList },
-  { title: "Results", url: "/admin/results", icon: FileText },
-  { title: "Report Cards", url: "/admin/report-cards", icon: Award },
-  { title: "Syllabus", url: "/admin/syllabus", icon: BookOpen },
-  { title: "Online Exams", url: "/admin/online-exams", icon: Monitor },
-  { title: "Certificates", url: "/admin/certificates", icon: ScrollText },
+const groups: NavGroup[] = [
+  {
+    label: "Management",
+    icon: Users,
+    items: [
+      { title: "Students", url: "/admin/students", icon: Users },
+      { title: "Teachers", url: "/admin/teachers", icon: Users },
+      { title: "Courses", url: "/admin/courses", icon: BookOpen },
+      { title: "Departments", url: "/admin/departments", icon: List },
+      { title: "Classes & Sections", url: "/admin/classes", icon: Users },
+      { title: "Subject Mapping", url: "/admin/subject-mapping", icon: BookOpen },
+      { title: "Admissions", url: "/admin/admissions", icon: ClipboardList },
+    ],
+  },
+  {
+    label: "Academic",
+    icon: GraduationCap,
+    items: [
+      { title: "Exams", url: "/admin/exams", icon: Calendar },
+      { title: "Marksheets", url: "/admin/marksheets", icon: ClipboardList },
+      { title: "Results", url: "/admin/results", icon: FileText },
+      { title: "Report Cards", url: "/admin/report-cards", icon: Award },
+      { title: "Syllabus", url: "/admin/syllabus", icon: BookOpen },
+      { title: "Online Exams", url: "/admin/online-exams", icon: Monitor },
+      { title: "Certificates", url: "/admin/certificates", icon: ScrollText },
+    ],
+  },
+  {
+    label: "Communication",
+    icon: MessageSquare,
+    items: [
+      { title: "Notices", url: "/admin/notices", icon: Bell },
+      { title: "Notifications", url: "/admin/notifications", icon: Bell },
+      { title: "Events", url: "/admin/events", icon: Calendar },
+      { title: "Gallery", url: "/admin/gallery", icon: Image },
+      { title: "Messaging", url: "/admin/messaging", icon: MessageSquare },
+      { title: "Complaints", url: "/admin/complaints", icon: MessageSquare },
+    ],
+  },
+  {
+    label: "Finance",
+    icon: DollarSign,
+    items: [
+      { title: "Fees", url: "/admin/fees", icon: DollarSign },
+      { title: "Fee Structure", url: "/admin/fee-structure", icon: DollarSign },
+      { title: "Expenses", url: "/admin/expenses", icon: DollarSign },
+      { title: "Accounting", url: "/admin/accounting", icon: BookOpen },
+    ],
+  },
+  {
+    label: "Infrastructure",
+    icon: Home,
+    items: [
+      { title: "HR & Payroll", url: "/admin/hr", icon: Briefcase },
+      { title: "Hostel", url: "/admin/hostel", icon: Home },
+      { title: "Transport", url: "/admin/transport", icon: Bus },
+      { title: "Inventory", url: "/admin/inventory", icon: Package },
+      { title: "Library", url: "/admin/library", icon: Library },
+    ],
+  },
+  {
+    label: "System",
+    icon: Settings,
+    items: [
+      { title: "Analytics", url: "/admin/analytics", icon: BarChart3 },
+      { title: "Audit Logs", url: "/admin/audit-logs", icon: Shield },
+      { title: "Settings", url: "/admin/settings", icon: Settings },
+    ],
+  },
 ];
 
-const contentNav = [
-  { title: "Notices", url: "/admin/notices", icon: Bell },
-  { title: "Notifications", url: "/admin/notifications", icon: Bell },
-  { title: "Events", url: "/admin/events", icon: Calendar },
-  { title: "Gallery", url: "/admin/gallery", icon: Image },
-  { title: "Messaging", url: "/admin/messaging", icon: MessageSquare },
-  { title: "Complaints", url: "/admin/complaints", icon: MessageSquare },
-];
-
-const financeNav = [
-  { title: "Fees", url: "/admin/fees", icon: DollarSign },
-  { title: "Fee Structure", url: "/admin/fee-structure", icon: DollarSign },
-  { title: "Expenses", url: "/admin/expenses", icon: DollarSign },
-  { title: "Accounting", url: "/admin/accounting", icon: BookOpen },
-];
-
-const infraNav = [
-  { title: "HR & Payroll", url: "/admin/hr", icon: Briefcase },
-  { title: "Hostel", url: "/admin/hostel", icon: Home },
-  { title: "Transport", url: "/admin/transport", icon: Bus },
-  { title: "Inventory", url: "/admin/inventory", icon: Package },
-  { title: "Library", url: "/admin/library", icon: Library },
-];
-
-const systemNav = [
-  { title: "Analytics", url: "/admin/analytics", icon: BarChart3 },
-  { title: "Audit Logs", url: "/admin/audit-logs", icon: Shield },
-  { title: "Settings", url: "/admin/settings", icon: Settings },
-];
-
-const allNav = [...mainNav, ...academicNav, ...contentNav, ...financeNav, ...infraNav, ...systemNav];
+const allNav = [...topNav, ...groups.flatMap(g => g.items)];
 
 const AdminLayout = () => {
   const location = useLocation();
@@ -90,27 +130,54 @@ const AdminLayout = () => {
             </SidebarMenuItem></SidebarMenu>
           </SidebarHeader>
           <SidebarContent>
-            {[
-              { label: "Management", items: mainNav },
-              { label: "Academic", items: academicNav },
-              { label: "Communication", items: contentNav },
-              { label: "Finance", items: financeNav },
-              { label: "Infrastructure", items: infraNav },
-              { label: "System", items: systemNav },
-            ].map(group => (
-              <SidebarGroup key={group.label}>
-                <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
-                <SidebarGroupContent><SidebarMenu>
-                  {group.items.map(item => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild isActive={location.pathname === item.url} tooltip={item.title}>
-                        <Link to={item.url}><item.icon /><span>{item.title}</span></Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu></SidebarGroupContent>
-              </SidebarGroup>
-            ))}
+            {/* Dashboard - top level */}
+            <SidebarGroup>
+              <SidebarMenu>
+                {topNav.map(item => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={location.pathname === item.url} tooltip={item.title}>
+                      <Link to={item.url}><item.icon /><span>{item.title}</span></Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroup>
+
+            {/* Collapsible groups */}
+            {groups.map(group => {
+              const isGroupActive = group.items.some(i => location.pathname === i.url);
+              return (
+                <SidebarGroup key={group.label}>
+                  <SidebarMenu>
+                    <Collapsible defaultOpen={isGroupActive} className="group/collapsible">
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton tooltip={group.label}>
+                            <group.icon />
+                            <span>{group.label}</span>
+                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {group.items.map(item => (
+                              <SidebarMenuSubItem key={item.title}>
+                                <SidebarMenuSubButton asChild isActive={location.pathname === item.url}>
+                                  <Link to={item.url}>
+                                    <item.icon />
+                                    <span>{item.title}</span>
+                                  </Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  </SidebarMenu>
+                </SidebarGroup>
+              );
+            })}
           </SidebarContent>
           <SidebarFooter>
             <SidebarMenu><SidebarMenuItem>
