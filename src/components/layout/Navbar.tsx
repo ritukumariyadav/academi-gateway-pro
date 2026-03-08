@@ -169,6 +169,10 @@ const Navbar = () => {
             </ScrollArea>
             <Separator />
             <div className="p-4 flex flex-col gap-2">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-muted-foreground">Theme</span>
+                <ThemeToggle />
+              </div>
               <SheetClose asChild>
                 <Link to="/apply-online">
                   <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-semibold">Apply Now</Button>
