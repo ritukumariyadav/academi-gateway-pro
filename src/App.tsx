@@ -110,6 +110,7 @@ import AdminCertificates from "@/pages/admin/AdminCertificates";
 import AdminComplaints from "@/pages/admin/AdminComplaints";
 import AdminOnlineExams from "@/pages/admin/AdminOnlineExams";
 import AdminMessaging from "@/pages/admin/AdminMessaging";
+import AdminAccounting from "@/pages/admin/AdminAccounting";
 
 // Parent pages
 import ParentDashboard from "@/pages/parent/ParentDashboard";
@@ -227,6 +228,7 @@ const App = () => (
             <Route path="/admin/complaints" element={<AdminComplaints />} />
             <Route path="/admin/fees" element={<AdminFees />} />
             <Route path="/admin/fee-structure" element={<AdminFeeStructure />} />
+            <Route path="/admin/accounting" element={<AdminAccounting />} />
             <Route path="/admin/expenses" element={<AdminExpenses />} />
             <Route path="/admin/hr" element={<AdminHR />} />
             <Route path="/admin/hostel" element={<AdminHostel />} />

@@ -48,6 +48,7 @@ const financeNav = [
   { title: "Fees", url: "/admin/fees", icon: DollarSign },
   { title: "Fee Structure", url: "/admin/fee-structure", icon: DollarSign },
   { title: "Expenses", url: "/admin/expenses", icon: DollarSign },
+  { title: "Accounting", url: "/admin/accounting", icon: BookOpen },
 ];
 
 const infraNav = [
