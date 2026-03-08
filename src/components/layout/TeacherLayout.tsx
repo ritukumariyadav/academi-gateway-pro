@@ -44,9 +44,12 @@ const navItems = [
   { title: "Profile", url: "/teacher/profile", icon: User },
   { title: "Attendance", url: "/teacher/attendance", icon: Calendar },
   { title: "Assignments", url: "/teacher/assignments", icon: Upload },
+  { title: "Marksheets", url: "/teacher/marksheets", icon: ClipboardList },
   { title: "Results", url: "/teacher/results", icon: FileText },
   { title: "Schedule", url: "/teacher/schedule", icon: BookOpen },
+  { title: "Syllabus", url: "/teacher/syllabus", icon: BookOpen },
   { title: "Notices", url: "/teacher/notices", icon: Bell },
+  { title: "Notifications", url: "/teacher/notifications", icon: Send },
   { title: "Students", url: "/teacher/students", icon: Users },
 ];
 

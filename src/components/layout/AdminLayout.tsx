@@ -50,7 +50,10 @@ const mainNav = [
 ];
 
 const contentNav = [
+  { title: "Marksheets", url: "/admin/marksheets", icon: ClipboardList },
+  { title: "Syllabus", url: "/admin/syllabus", icon: BookOpen },
   { title: "Notices", url: "/admin/notices", icon: Bell },
+  { title: "Notifications", url: "/admin/notifications", icon: Bell },
   { title: "Events", url: "/admin/events", icon: Calendar },
   { title: "Gallery", url: "/admin/gallery", icon: Image },
   { title: "Results", url: "/admin/results", icon: FileText },
