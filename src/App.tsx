@@ -139,9 +139,12 @@ const App = () => (
             <Route path="/teacher/profile" element={<TeacherProfile />} />
             <Route path="/teacher/attendance" element={<TeacherAttendance />} />
             <Route path="/teacher/assignments" element={<TeacherAssignments />} />
+            <Route path="/teacher/marksheets" element={<TeacherMarksheets />} />
             <Route path="/teacher/results" element={<TeacherResults />} />
             <Route path="/teacher/schedule" element={<TeacherSchedule />} />
+            <Route path="/teacher/syllabus" element={<TeacherSyllabus />} />
             <Route path="/teacher/notices" element={<TeacherNotices />} />
+            <Route path="/teacher/notifications" element={<TeacherNotifications />} />
             <Route path="/teacher/students" element={<TeacherStudents />} />
           </Route>
 
