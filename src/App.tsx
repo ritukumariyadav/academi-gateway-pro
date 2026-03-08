@@ -30,6 +30,11 @@ import AcademicCalendar from "@/pages/AcademicCalendar";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsConditions from "@/pages/TermsConditions";
 import NotFound from "@/pages/NotFound";
+import CourseDetail from "@/pages/CourseDetail";
+import DepartmentDetail from "@/pages/DepartmentDetail";
+import FacultyDetail from "@/pages/FacultyDetail";
+import NoticeDetail from "@/pages/NoticeDetail";
+import EventDetail from "@/pages/EventDetail";
 
 // Student pages
 import StudentDashboard from "@/pages/dashboard/StudentDashboard";
