@@ -97,6 +97,7 @@ const Navbar = () => {
         </div>
 
         <div className="hidden lg:flex items-center gap-2">
+          <ThemeToggle />
           <Link to="/apply-online">
             <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold">Apply Now</Button>
           </Link>
