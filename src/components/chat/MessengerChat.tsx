@@ -9,6 +9,8 @@ import {
   Send, Search, Phone, Video, Info, Image, Paperclip, Smile,
   MoreHorizontal, Check, CheckCheck, ArrowLeft, Plus, Mic,
   Users, UserPlus, Settings, Pin, BellOff, LogOut as LeaveIcon,
+  PanelLeftClose, PanelLeftOpen,
+  Users, UserPlus, Settings, Pin, BellOff, LogOut as LeaveIcon,
 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
