@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 
 interface PageBannerProps {
   title: string;
+  subtitle?: string;
   breadcrumbs?: { label: string; path?: string }[];
 }
 
