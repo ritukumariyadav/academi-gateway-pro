@@ -1,17 +1,59 @@
+import { ColumnDef } from "@tanstack/react-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Download, Upload } from "lucide-react";
+import { DataTable, DataTableColumnHeader } from "@/components/ui/data-table";
 
-const resultSummary = [
+type ResultSummary = {
+  course: string;
+  faculty: string;
+  submitted: boolean;
+  students: number;
+  passRate: number;
+};
+
+const resultSummary: ResultSummary[] = [
   { course: "CS201 — Data Structures", faculty: "Dr. Robert Chen", submitted: true, students: 45, passRate: 96 },
   { course: "CS301 — Algorithm Design", faculty: "Dr. Robert Chen", submitted: true, students: 38, passRate: 92 },
   { course: "MA201 — Discrete Math", faculty: "Dr. Lisa Wang", submitted: false, students: 42, passRate: 0 },
   { course: "PH201 — Physics II", faculty: "Dr. James Thompson", submitted: true, students: 50, passRate: 88 },
   { course: "EC201 — Digital Electronics", faculty: "Dr. Alan Foster", submitted: true, students: 40, passRate: 95 },
   { course: "EN201 — English Communication", faculty: "Prof. Maria Garcia", submitted: false, students: 36, passRate: 0 },
+];
+
+const columns: ColumnDef<ResultSummary>[] = [
+  {
+    accessorKey: "course",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Course" />,
+    cell: ({ row }) => <span className="font-medium">{row.getValue("course")}</span>,
+  },
+  {
+    accessorKey: "faculty",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Faculty" />,
+  },
+  {
+    accessorKey: "students",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Students" />,
+  },
+  {
+    accessorKey: "passRate",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Pass Rate" />,
+    cell: ({ row }) => {
+      const r = row.original;
+      return r.submitted ? `${r.passRate}%` : "—";
+    },
+  },
+  {
+    accessorKey: "submitted",
+    header: "Status",
+    cell: ({ row }) => (
+      <Badge variant={row.getValue("submitted") ? "default" : "destructive"}>
+        {row.getValue("submitted") ? "Submitted" : "Pending"}
+      </Badge>
+    ),
+  },
 ];
 
 const AdminResults = () => (
@@ -42,30 +84,8 @@ const AdminResults = () => (
     </div>
     <Card>
       <CardHeader><CardTitle>Result Submission Status</CardTitle></CardHeader>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Course</TableHead><TableHead>Faculty</TableHead><TableHead>Students</TableHead>
-              <TableHead>Pass Rate</TableHead><TableHead>Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {resultSummary.map((r, i) => (
-              <TableRow key={i}>
-                <TableCell className="font-medium">{r.course}</TableCell>
-                <TableCell className="text-sm">{r.faculty}</TableCell>
-                <TableCell>{r.students}</TableCell>
-                <TableCell>{r.submitted ? `${r.passRate}%` : "—"}</TableCell>
-                <TableCell>
-                  <Badge variant={r.submitted ? "default" : "destructive"}>
-                    {r.submitted ? "Submitted" : "Pending"}
-                  </Badge>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      <CardContent>
+        <DataTable columns={columns} data={resultSummary} searchKey="course" searchPlaceholder="Search courses..." showPagination={false} />
       </CardContent>
     </Card>
   </div>
