@@ -1,8 +1,12 @@
+import { ColumnDef } from "@tanstack/react-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { DataTable, DataTableColumnHeader } from "@/components/ui/data-table";
 
-const semesters = [
+type Subject = { name: string; code: string; internal: number; external: number; total: number; grade: string };
+type Semester = { sem: string; sgpa: string; subjects: Subject[] };
+
+const semesters: Semester[] = [
   {
     sem: "Semester 3 (Current)", sgpa: "8.6",
     subjects: [
@@ -29,24 +33,23 @@ const gradeColor = (g: string) => {
   return "outline";
 };
 
+const columns: ColumnDef<Subject>[] = [
+  { accessorKey: "code", header: "Code", cell: ({ row }) => <span className="font-mono text-xs">{row.getValue("code")}</span> },
+  { accessorKey: "name", header: ({ column }) => <DataTableColumnHeader column={column} title="Subject" />, cell: ({ row }) => <span className="font-medium">{row.getValue("name")}</span> },
+  { accessorKey: "internal", header: "Internal", cell: ({ row }) => <span className="text-center">{row.getValue("internal")}/50</span> },
+  { accessorKey: "external", header: "External", cell: ({ row }) => <span className="text-center">{row.getValue("external")}/100</span> },
+  { accessorKey: "total", header: ({ column }) => <DataTableColumnHeader column={column} title="Total" />, cell: ({ row }) => <span className="font-medium">{row.getValue("total")}/150</span> },
+  { accessorKey: "grade", header: "Grade", cell: ({ row }) => <Badge variant={gradeColor(row.getValue("grade")) as any}>{row.getValue("grade")}</Badge> },
+];
+
 const StudentResults = () => (
   <div className="space-y-6">
     <h1 className="font-display text-2xl font-bold">Exam Results</h1>
     <div className="grid sm:grid-cols-3 gap-4">
-      <Card><CardContent className="p-4 text-center">
-        <p className="text-3xl font-bold text-accent">8.4</p>
-        <p className="text-sm text-muted-foreground">CGPA</p>
-      </CardContent></Card>
-      <Card><CardContent className="p-4 text-center">
-        <p className="text-3xl font-bold">8.6</p>
-        <p className="text-sm text-muted-foreground">Latest SGPA</p>
-      </CardContent></Card>
-      <Card><CardContent className="p-4 text-center">
-        <p className="text-3xl font-bold text-success">0</p>
-        <p className="text-sm text-muted-foreground">Backlogs</p>
-      </CardContent></Card>
+      <Card><CardContent className="p-4 text-center"><p className="text-3xl font-bold text-accent">8.4</p><p className="text-sm text-muted-foreground">CGPA</p></CardContent></Card>
+      <Card><CardContent className="p-4 text-center"><p className="text-3xl font-bold">8.6</p><p className="text-sm text-muted-foreground">Latest SGPA</p></CardContent></Card>
+      <Card><CardContent className="p-4 text-center"><p className="text-3xl font-bold text-success">0</p><p className="text-sm text-muted-foreground">Backlogs</p></CardContent></Card>
     </div>
-
     {semesters.map((sem) => (
       <Card key={sem.sem}>
         <CardHeader>
@@ -56,30 +59,7 @@ const StudentResults = () => (
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Code</TableHead>
-                <TableHead>Subject</TableHead>
-                <TableHead className="text-center">Internal</TableHead>
-                <TableHead className="text-center">External</TableHead>
-                <TableHead className="text-center">Total</TableHead>
-                <TableHead className="text-center">Grade</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {sem.subjects.map((s) => (
-                <TableRow key={s.code}>
-                  <TableCell className="font-mono text-xs">{s.code}</TableCell>
-                  <TableCell className="font-medium">{s.name}</TableCell>
-                  <TableCell className="text-center">{s.internal}/50</TableCell>
-                  <TableCell className="text-center">{s.external}/100</TableCell>
-                  <TableCell className="text-center font-medium">{s.total}/150</TableCell>
-                  <TableCell className="text-center"><Badge variant={gradeColor(s.grade) as any}>{s.grade}</Badge></TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <DataTable columns={columns} data={sem.subjects} showPagination={false} showColumnToggle={false} />
         </CardContent>
       </Card>
     ))}

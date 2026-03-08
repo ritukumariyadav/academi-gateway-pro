@@ -1,10 +1,20 @@
+import { ColumnDef } from "@tanstack/react-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye, CheckCircle, XCircle } from "lucide-react";
+import { DataTable, DataTableColumnHeader } from "@/components/ui/data-table";
 
-const applications = [
+type Application = {
+  id: number;
+  name: string;
+  program: string;
+  date: string;
+  score: number;
+  status: string;
+};
+
+const applications: Application[] = [
   { id: 1, name: "Aisha Kumar", program: "B.Tech Computer Science", date: "Mar 5, 2026", score: 92, status: "pending" },
   { id: 2, name: "John Park", program: "MBA Business Admin", date: "Mar 4, 2026", score: 85, status: "pending" },
   { id: 3, name: "Maria Lopez", program: "B.Sc Physics", date: "Mar 3, 2026", score: 78, status: "pending" },
@@ -22,6 +32,46 @@ const statusVariant = (s: string) => {
     default: return "outline";
   }
 };
+
+const columns: ColumnDef<Application>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Applicant" />,
+    cell: ({ row }) => <span className="font-medium">{row.getValue("name")}</span>,
+  },
+  {
+    accessorKey: "program",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Program" />,
+  },
+  {
+    accessorKey: "date",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />,
+  },
+  {
+    accessorKey: "score",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Score" />,
+    cell: ({ row }) => <span className="font-medium">{row.getValue("score")}%</span>,
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => (
+      <Badge variant={statusVariant(row.getValue("status")) as any} className="capitalize">
+        {row.getValue("status")}
+      </Badge>
+    ),
+  },
+  {
+    id: "actions",
+    cell: () => (
+      <div className="flex gap-1">
+        <Button size="icon" variant="ghost" className="h-8 w-8"><Eye className="h-4 w-4" /></Button>
+        <Button size="icon" variant="ghost" className="h-8 w-8 text-success"><CheckCircle className="h-4 w-4" /></Button>
+        <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive"><XCircle className="h-4 w-4" /></Button>
+      </div>
+    ),
+  },
+];
 
 const AdminAdmissions = () => (
   <div className="space-y-6">
@@ -41,33 +91,8 @@ const AdminAdmissions = () => (
     </div>
     <Card>
       <CardHeader><CardTitle>Applications</CardTitle></CardHeader>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Applicant</TableHead><TableHead>Program</TableHead><TableHead>Date</TableHead>
-              <TableHead>Score</TableHead><TableHead>Status</TableHead><TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {applications.map((a) => (
-              <TableRow key={a.id}>
-                <TableCell className="font-medium">{a.name}</TableCell>
-                <TableCell className="text-sm">{a.program}</TableCell>
-                <TableCell className="text-sm">{a.date}</TableCell>
-                <TableCell className="font-medium">{a.score}%</TableCell>
-                <TableCell><Badge variant={statusVariant(a.status) as any} className="capitalize">{a.status}</Badge></TableCell>
-                <TableCell>
-                  <div className="flex gap-1">
-                    <Button size="icon" variant="ghost" className="h-8 w-8"><Eye className="h-4 w-4" /></Button>
-                    <Button size="icon" variant="ghost" className="h-8 w-8 text-success"><CheckCircle className="h-4 w-4" /></Button>
-                    <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive"><XCircle className="h-4 w-4" /></Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      <CardContent>
+        <DataTable columns={columns} data={applications} searchKey="name" searchPlaceholder="Search applicants..." />
       </CardContent>
     </Card>
   </div>
