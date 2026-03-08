@@ -53,10 +53,13 @@ import TeacherDashboard from "@/pages/dashboard/TeacherDashboard";
 import TeacherProfile from "@/pages/teacher/TeacherProfile";
 import TeacherAttendance from "@/pages/teacher/TeacherAttendance";
 import TeacherAssignments from "@/pages/teacher/TeacherAssignments";
+import TeacherMarksheets from "@/pages/teacher/TeacherMarksheets";
 import TeacherResults from "@/pages/teacher/TeacherResults";
 import TeacherSchedule from "@/pages/teacher/TeacherSchedule";
 import TeacherNotices from "@/pages/teacher/TeacherNotices";
+import TeacherNotifications from "@/pages/teacher/TeacherNotifications";
 import TeacherStudents from "@/pages/teacher/TeacherStudents";
+import TeacherSyllabus from "@/pages/teacher/TeacherSyllabus";
 
 // Admin pages
 import AdminDashboard from "@/pages/dashboard/AdminDashboard";
