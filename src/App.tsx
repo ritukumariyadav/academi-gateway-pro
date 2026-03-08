@@ -42,6 +42,7 @@ import StudentProfile from "@/pages/student/StudentProfile";
 import StudentAttendance from "@/pages/student/StudentAttendance";
 import StudentResults from "@/pages/student/StudentResults";
 import StudentAssignments from "@/pages/student/StudentAssignments";
+import StudentSyllabus from "@/pages/student/StudentSyllabus";
 import StudentTimetable from "@/pages/student/StudentTimetable";
 import StudentFees from "@/pages/student/StudentFees";
 import StudentLibrary from "@/pages/student/StudentLibrary";
