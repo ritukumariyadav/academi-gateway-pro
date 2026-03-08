@@ -1,11 +1,11 @@
+import { ColumnDef } from "@tanstack/react-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { DataTable, DataTableColumnHeader } from "@/components/ui/data-table";
 
-const students = [
+type Student = { roll: string; name: string; email: string; attendance: number; cgpa: number; status: string };
+
+const students: Student[] = [
   { roll: "CS2024-001", name: "Aisha Kumar", email: "aisha.k@student.edu", attendance: 92, cgpa: 9.1, status: "active" },
   { roll: "CS2024-005", name: "David Kim", email: "david.k@student.edu", attendance: 88, cgpa: 8.7, status: "active" },
   { roll: "CS2024-012", name: "Emma Wilson", email: "emma.w@student.edu", attendance: 75, cgpa: 7.2, status: "warning" },
@@ -16,55 +16,21 @@ const students = [
   { roll: "CS2024-042", name: "Sarah Chen", email: "sarah.c@student.edu", attendance: 95, cgpa: 9.4, status: "active" },
 ];
 
+const columns: ColumnDef<Student>[] = [
+  { accessorKey: "roll", header: ({ column }) => <DataTableColumnHeader column={column} title="Roll No" />, cell: ({ row }) => <span className="font-mono text-sm">{row.getValue("roll")}</span> },
+  { accessorKey: "name", header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />, cell: ({ row }) => <span className="font-medium">{row.getValue("name")}</span> },
+  { accessorKey: "email", header: "Email", cell: ({ row }) => <span className="text-sm text-muted-foreground">{row.getValue("email")}</span> },
+  { accessorKey: "attendance", header: ({ column }) => <DataTableColumnHeader column={column} title="Attendance" />, cell: ({ row }) => { const v = row.getValue("attendance") as number; return <span className={v < 80 ? "text-destructive font-medium" : ""}>{v}%</span>; } },
+  { accessorKey: "cgpa", header: ({ column }) => <DataTableColumnHeader column={column} title="CGPA" />, cell: ({ row }) => <span className="font-medium">{row.getValue("cgpa")}</span> },
+  { accessorKey: "status", header: "Status", cell: ({ row }) => <Badge variant={row.getValue("status") === "warning" ? "destructive" : "default"} className="capitalize">{row.getValue("status")}</Badge> },
+];
+
 const TeacherStudents = () => (
   <div className="space-y-6">
     <h1 className="font-display text-2xl font-bold">Student List</h1>
-    <div className="flex flex-col sm:flex-row gap-3">
-      <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input placeholder="Search students..." className="pl-9" />
-      </div>
-      <Select defaultValue="cs201">
-        <SelectTrigger className="w-[220px]"><SelectValue placeholder="Filter by Course" /></SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">All Courses</SelectItem>
-          <SelectItem value="cs201">CS201 — Data Structures</SelectItem>
-          <SelectItem value="cs301">CS301 — Algorithm Design</SelectItem>
-          <SelectItem value="cs401">CS401 — AI Fundamentals</SelectItem>
-        </SelectContent>
-      </Select>
-    </div>
-
     <Card>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Roll No</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead className="text-center">Attendance</TableHead>
-              <TableHead className="text-center">CGPA</TableHead>
-              <TableHead>Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {students.map((s) => (
-              <TableRow key={s.roll}>
-                <TableCell className="font-mono text-sm">{s.roll}</TableCell>
-                <TableCell className="font-medium">{s.name}</TableCell>
-                <TableCell className="text-sm text-muted-foreground">{s.email}</TableCell>
-                <TableCell className="text-center">
-                  <span className={s.attendance < 80 ? "text-destructive font-medium" : ""}>{s.attendance}%</span>
-                </TableCell>
-                <TableCell className="text-center font-medium">{s.cgpa}</TableCell>
-                <TableCell>
-                  <Badge variant={s.status === "warning" ? "destructive" : "default"} className="capitalize">{s.status}</Badge>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      <CardContent className="p-4">
+        <DataTable columns={columns} data={students} searchKey="name" searchPlaceholder="Search students..." />
       </CardContent>
     </Card>
   </div>

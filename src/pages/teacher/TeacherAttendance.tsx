@@ -1,11 +1,15 @@
+import { ColumnDef } from "@tanstack/react-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CheckCircle, Users } from "lucide-react";
+import { CheckCircle } from "lucide-react";
+import { DataTable } from "@/components/ui/data-table";
 
-const students = [
+type Student = { roll: string; name: string; present: boolean };
+
+const students: Student[] = [
   { roll: "CS2024-001", name: "Aisha Kumar", present: true },
   { roll: "CS2024-005", name: "David Kim", present: true },
   { roll: "CS2024-012", name: "Emma Wilson", present: false },
@@ -16,24 +20,20 @@ const students = [
   { roll: "CS2024-042", name: "Sarah Chen", present: true },
 ];
 
+const columns: ColumnDef<Student>[] = [
+  { id: "present", header: "Present", cell: ({ row }) => <Checkbox defaultChecked={row.original.present} />, enableSorting: false, enableHiding: false },
+  { accessorKey: "roll", header: "Roll No", cell: ({ row }) => <span className="font-mono text-sm">{row.getValue("roll")}</span> },
+  { accessorKey: "name", header: "Student Name", cell: ({ row }) => <span className="font-medium">{row.getValue("name")}</span> },
+];
+
 const TeacherAttendance = () => (
   <div className="space-y-6">
     <h1 className="font-display text-2xl font-bold">Manage Attendance</h1>
     <div className="grid sm:grid-cols-3 gap-4">
-      <Card><CardContent className="p-4 text-center">
-        <p className="text-3xl font-bold text-success">6</p>
-        <p className="text-sm text-muted-foreground">Present</p>
-      </CardContent></Card>
-      <Card><CardContent className="p-4 text-center">
-        <p className="text-3xl font-bold text-destructive">2</p>
-        <p className="text-sm text-muted-foreground">Absent</p>
-      </CardContent></Card>
-      <Card><CardContent className="p-4 text-center">
-        <p className="text-3xl font-bold">8</p>
-        <p className="text-sm text-muted-foreground">Total Students</p>
-      </CardContent></Card>
+      <Card><CardContent className="p-4 text-center"><p className="text-3xl font-bold text-success">6</p><p className="text-sm text-muted-foreground">Present</p></CardContent></Card>
+      <Card><CardContent className="p-4 text-center"><p className="text-3xl font-bold text-destructive">2</p><p className="text-sm text-muted-foreground">Absent</p></CardContent></Card>
+      <Card><CardContent className="p-4 text-center"><p className="text-3xl font-bold">8</p><p className="text-sm text-muted-foreground">Total Students</p></CardContent></Card>
     </div>
-
     <Card>
       <CardHeader>
         <div className="flex flex-col sm:flex-row justify-between gap-4">
@@ -52,24 +52,7 @@ const TeacherAttendance = () => (
         </div>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-12">Present</TableHead>
-              <TableHead>Roll No</TableHead>
-              <TableHead>Student Name</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {students.map((s) => (
-              <TableRow key={s.roll}>
-                <TableCell><Checkbox defaultChecked={s.present} /></TableCell>
-                <TableCell className="font-mono text-sm">{s.roll}</TableCell>
-                <TableCell className="font-medium">{s.name}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <DataTable columns={columns} data={students} showPagination={false} showColumnToggle={false} />
       </CardContent>
     </Card>
   </div>
