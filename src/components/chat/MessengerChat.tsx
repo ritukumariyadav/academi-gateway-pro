@@ -9,6 +9,7 @@ import {
   Send, Search, Phone, Video, Info, Image, Paperclip, Smile,
   MoreHorizontal, Check, CheckCheck, ArrowLeft, Plus, Mic,
   Users, UserPlus, Settings, Pin, BellOff, LogOut as LeaveIcon,
+  PanelLeftClose, PanelLeftOpen,
 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
@@ -74,6 +75,7 @@ const MessengerChat: React.FC<MessengerChatProps> = ({
   const [newGroupName, setNewGroupName] = useState("");
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<"all" | "direct" | "groups">("all");
+  const [chatListCollapsed, setChatListCollapsed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const filteredContacts = contacts.filter(c => {
@@ -204,48 +206,64 @@ const MessengerChat: React.FC<MessengerChatProps> = ({
       <div className="h-[calc(100vh-8rem)] flex rounded-xl border bg-card overflow-hidden">
         {/* Contacts sidebar */}
         <div className={cn(
-          "w-full md:w-80 lg:w-96 border-r flex flex-col bg-card",
-          mobileShowChat ? "hidden md:flex" : "flex"
+          "border-r flex flex-col bg-card transition-all duration-200",
+          mobileShowChat ? "hidden md:flex" : "flex",
+          chatListCollapsed ? "w-[68px]" : "w-full md:w-80 lg:w-96"
         )}>
-          {/* Search header */}
-          <div className="p-4 border-b space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold">Chats</h2>
-              <div className="flex gap-1">
+          {/* Header */}
+          <div className={cn("border-b", chatListCollapsed ? "p-2" : "p-4 space-y-3")}>
+            {chatListCollapsed ? (
+              <div className="flex flex-col items-center gap-2">
+                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={() => setChatListCollapsed(false)} title="Expand chat list">
+                  <PanelLeftOpen className="h-4 w-4" />
+                </Button>
                 <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={() => setShowCreateGroup(true)} title="Create Group">
                   <Users className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
-                  <Plus className="h-4 w-4" />
-                </Button>
               </div>
-            </div>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search conversations..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                className="pl-9 bg-muted/50 border-0 rounded-full h-9"
-              />
-            </div>
-            {/* Tabs */}
-            <div className="flex gap-1">
-              {(["all", "direct", "groups"] as const).map(tab => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={cn(
-                    "px-3 py-1 rounded-full text-xs font-medium transition-colors",
-                    activeTab === tab
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  )}
-                >
-                  {tab === "all" ? "All" : tab === "direct" ? "Direct" : "Groups"}
-                </button>
-              ))}
-            </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold">Chats</h2>
+                  <div className="flex gap-1">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={() => setChatListCollapsed(true)} title="Collapse chat list">
+                      <PanelLeftClose className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={() => setShowCreateGroup(true)} title="Create Group">
+                      <Users className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search conversations..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="pl-9 bg-muted/50 border-0 rounded-full h-9"
+                  />
+                </div>
+                <div className="flex gap-1">
+                  {(["all", "direct", "groups"] as const).map(tab => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={cn(
+                        "px-3 py-1 rounded-full text-xs font-medium transition-colors",
+                        activeTab === tab
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground hover:bg-muted/80"
+                      )}
+                    >
+                      {tab === "all" ? "All" : tab === "direct" ? "Direct" : "Groups"}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
           {/* Contact list */}
@@ -256,17 +274,19 @@ const MessengerChat: React.FC<MessengerChatProps> = ({
                   key={contact.id}
                   onClick={() => selectContact(contact)}
                   className={cn(
-                    "flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors hover:bg-muted/50",
-                    selectedContact?.id === contact.id && "bg-muted"
+                    "flex items-center cursor-pointer transition-colors hover:bg-muted/50",
+                    selectedContact?.id === contact.id && "bg-muted",
+                    chatListCollapsed ? "justify-center px-2 py-2" : "gap-3 px-4 py-3"
                   )}
+                  title={chatListCollapsed ? `${contact.name}${contact.unread > 0 ? ` (${contact.unread})` : ""}` : undefined}
                 >
-                  <div className="relative">
+                  <div className="relative shrink-0">
                     {contact.isGroup ? (
-                      <div className="h-12 w-12 rounded-full bg-accent flex items-center justify-center">
-                        <Users className="h-5 w-5 text-accent-foreground" />
+                      <div className={cn("rounded-full bg-accent flex items-center justify-center", chatListCollapsed ? "h-10 w-10" : "h-12 w-12")}>
+                        <Users className={cn(chatListCollapsed ? "h-4 w-4" : "h-5 w-5", "text-accent-foreground")} />
                       </div>
                     ) : (
-                      <Avatar className="h-12 w-12">
+                      <Avatar className={chatListCollapsed ? "h-10 w-10" : "h-12 w-12"}>
                         {contact.avatar && <AvatarImage src={contact.avatar} />}
                         <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
                           {contact.initials}
@@ -274,37 +294,44 @@ const MessengerChat: React.FC<MessengerChatProps> = ({
                       </Avatar>
                     )}
                     {!contact.isGroup && contact.online && (
-                      <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full bg-emerald-500 border-2 border-card" />
+                      <span className={cn("absolute rounded-full bg-emerald-500 border-2 border-card", chatListCollapsed ? "bottom-0 right-0 h-2.5 w-2.5" : "bottom-0 right-0 h-3.5 w-3.5")} />
+                    )}
+                    {chatListCollapsed && contact.unread > 0 && (
+                      <span className="absolute -top-1 -right-1 h-4 min-w-4 rounded-full bg-primary text-primary-foreground text-[9px] font-bold flex items-center justify-center px-1">
+                        {contact.unread}
+                      </span>
                     )}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 min-w-0">
-                        <span className={cn("font-medium text-sm truncate", contact.unread > 0 && "font-bold")}>{contact.name}</span>
-                        {contact.isGroup && (
-                          <Badge variant="secondary" className="text-[9px] px-1 py-0 h-4 shrink-0">Group</Badge>
+                  {!chatListCollapsed && (
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className={cn("font-medium text-sm truncate", contact.unread > 0 && "font-bold")}>{contact.name}</span>
+                          {contact.isGroup && (
+                            <Badge variant="secondary" className="text-[9px] px-1 py-0 h-4 shrink-0">Group</Badge>
+                          )}
+                        </div>
+                        <span className="text-[11px] text-muted-foreground shrink-0 ml-2">{contact.time}</span>
+                      </div>
+                      <div className="flex items-center justify-between mt-0.5">
+                        <p className={cn(
+                          "text-xs truncate",
+                          contact.unread > 0 ? "text-foreground font-medium" : "text-muted-foreground"
+                        )}>{contact.lastMessage}</p>
+                        {contact.unread > 0 && (
+                          <Badge className="h-5 min-w-5 rounded-full px-1.5 text-[10px] bg-primary text-primary-foreground ml-2 shrink-0">
+                            {contact.unread}
+                          </Badge>
                         )}
                       </div>
-                      <span className="text-[11px] text-muted-foreground shrink-0 ml-2">{contact.time}</span>
+                      <span className="text-[10px] text-muted-foreground">
+                        {contact.isGroup ? `${contact.memberCount || 0} members` : contact.role}
+                      </span>
                     </div>
-                    <div className="flex items-center justify-between mt-0.5">
-                      <p className={cn(
-                        "text-xs truncate",
-                        contact.unread > 0 ? "text-foreground font-medium" : "text-muted-foreground"
-                      )}>{contact.lastMessage}</p>
-                      {contact.unread > 0 && (
-                        <Badge className="h-5 min-w-5 rounded-full px-1.5 text-[10px] bg-primary text-primary-foreground ml-2 shrink-0">
-                          {contact.unread}
-                        </Badge>
-                      )}
-                    </div>
-                    <span className="text-[10px] text-muted-foreground">
-                      {contact.isGroup ? `${contact.memberCount || 0} members` : contact.role}
-                    </span>
-                  </div>
+                  )}
                 </div>
               ))}
-              {filteredContacts.length === 0 && (
+              {filteredContacts.length === 0 && !chatListCollapsed && (
                 <div className="p-8 text-center text-muted-foreground text-sm">No conversations found</div>
               )}
             </div>
