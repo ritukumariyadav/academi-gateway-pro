@@ -39,6 +39,7 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import { Button } from "../ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const mainNav = [
   { title: "Dashboard", url: "/admin/dashboard", icon: LayoutDashboard },
@@ -202,6 +203,7 @@ const AdminLayout = () => {
                   <GraduationCap className="h-5 w-5" />
                 </Button>
               </Link>
+              <ThemeToggle />
               <Bell className="h-5 w-5 text-muted-foreground" />
               <div className="h-8 w-8 rounded-full bg-accent flex items-center justify-center text-accent-foreground text-sm font-bold">
                 A

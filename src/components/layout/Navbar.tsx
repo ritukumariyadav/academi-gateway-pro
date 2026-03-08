@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, ChevronDown, ChevronRight, GraduationCap } from "lucide-react";
+import { Menu, ChevronDown, ChevronRight } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import {
   Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose,
@@ -96,6 +97,7 @@ const Navbar = () => {
         </div>
 
         <div className="hidden lg:flex items-center gap-2">
+          <ThemeToggle />
           <Link to="/apply-online">
             <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold">Apply Now</Button>
           </Link>
@@ -167,6 +169,10 @@ const Navbar = () => {
             </ScrollArea>
             <Separator />
             <div className="p-4 flex flex-col gap-2">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-muted-foreground">Theme</span>
+                <ThemeToggle />
+              </div>
               <SheetClose asChild>
                 <Link to="/apply-online">
                   <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-semibold">Apply Now</Button>
