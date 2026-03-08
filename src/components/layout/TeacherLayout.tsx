@@ -2,45 +2,65 @@ import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, User, Calendar, Upload, FileText, BookOpen, Bell, Users,
   LogOut, GraduationCap, Shield, Send, ClipboardList, Award, MessageSquare,
-  Monitor, Library,
+  Monitor, Library, ChevronRight,
 } from "lucide-react";
 import {
-  Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
-  SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton,
-  SidebarMenuItem, SidebarProvider, SidebarRail, SidebarTrigger,
+  Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarInset,
+  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem,
+  SidebarMenuSubButton, SidebarProvider, SidebarRail, SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import { Button } from "../ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LucideIcon } from "lucide-react";
 
-const mainNav = [
+interface NavItem { title: string; url: string; icon: LucideIcon; }
+interface NavGroup { label: string; icon: LucideIcon; items: NavItem[]; }
+
+const topNav: NavItem[] = [
   { title: "Dashboard", url: "/teacher/dashboard", icon: LayoutDashboard },
   { title: "Profile", url: "/teacher/profile", icon: User },
-  { title: "Schedule", url: "/teacher/schedule", icon: BookOpen },
-  { title: "Students", url: "/teacher/students", icon: Users },
-  { title: "Attendance", url: "/teacher/attendance", icon: Calendar },
 ];
 
-const academicNav = [
-  { title: "Assignments", url: "/teacher/assignments", icon: Upload },
-  { title: "Marksheets", url: "/teacher/marksheets", icon: ClipboardList },
-  { title: "Results", url: "/teacher/results", icon: FileText },
-  { title: "Syllabus", url: "/teacher/syllabus", icon: BookOpen },
-  { title: "Exams", url: "/teacher/exams", icon: Calendar },
-  { title: "Report Cards", url: "/teacher/report-cards", icon: Award },
-  { title: "Online Quizzes", url: "/teacher/online-exams", icon: Monitor },
+const groups: NavGroup[] = [
+  {
+    label: "Teaching",
+    icon: BookOpen,
+    items: [
+      { title: "Schedule", url: "/teacher/schedule", icon: BookOpen },
+      { title: "Students", url: "/teacher/students", icon: Users },
+      { title: "Attendance", url: "/teacher/attendance", icon: Calendar },
+      { title: "Assignments", url: "/teacher/assignments", icon: Upload },
+    ],
+  },
+  {
+    label: "Academic",
+    icon: GraduationCap,
+    items: [
+      { title: "Marksheets", url: "/teacher/marksheets", icon: ClipboardList },
+      { title: "Results", url: "/teacher/results", icon: FileText },
+      { title: "Syllabus", url: "/teacher/syllabus", icon: BookOpen },
+      { title: "Exams", url: "/teacher/exams", icon: Calendar },
+      { title: "Report Cards", url: "/teacher/report-cards", icon: Award },
+      { title: "Online Quizzes", url: "/teacher/online-exams", icon: Monitor },
+    ],
+  },
+  {
+    label: "Communication",
+    icon: MessageSquare,
+    items: [
+      { title: "Library", url: "/teacher/library", icon: Library },
+      { title: "Notices", url: "/teacher/notices", icon: Bell },
+      { title: "Notifications", url: "/teacher/notifications", icon: Send },
+      { title: "Messages", url: "/teacher/messages", icon: MessageSquare },
+      { title: "Complaints", url: "/teacher/complaints", icon: MessageSquare },
+    ],
+  },
 ];
 
-const otherNav = [
-  { title: "Library", url: "/teacher/library", icon: Library },
-  { title: "Notices", url: "/teacher/notices", icon: Bell },
-  { title: "Notifications", url: "/teacher/notifications", icon: Send },
-  { title: "Messages", url: "/teacher/messages", icon: MessageSquare },
-  { title: "Complaints", url: "/teacher/complaints", icon: MessageSquare },
-];
-
-const allNav = [...mainNav, ...academicNav, ...otherNav];
+const allNav = [...topNav, ...groups.flatMap(g => g.items)];
 
 const TeacherLayout = () => {
   const location = useLocation();
@@ -65,24 +85,48 @@ const TeacherLayout = () => {
             </SidebarMenuItem></SidebarMenu>
           </SidebarHeader>
           <SidebarContent>
-            {[
-              { label: "Overview", items: mainNav },
-              { label: "Academic", items: academicNav },
-              { label: "Other", items: otherNav },
-            ].map(group => (
-              <SidebarGroup key={group.label}>
-                <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
-                <SidebarGroupContent><SidebarMenu>
-                  {group.items.map(item => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild isActive={location.pathname === item.url} tooltip={item.title}>
-                        <Link to={item.url}><item.icon /><span>{item.title}</span></Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu></SidebarGroupContent>
-              </SidebarGroup>
-            ))}
+            <SidebarGroup>
+              <SidebarMenu>
+                {topNav.map(item => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={location.pathname === item.url} tooltip={item.title}>
+                      <Link to={item.url}><item.icon /><span>{item.title}</span></Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroup>
+            {groups.map(group => {
+              const isGroupActive = group.items.some(i => location.pathname === i.url);
+              return (
+                <SidebarGroup key={group.label}>
+                  <SidebarMenu>
+                    <Collapsible defaultOpen={isGroupActive} className="group/collapsible">
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton tooltip={group.label}>
+                            <group.icon />
+                            <span>{group.label}</span>
+                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {group.items.map(item => (
+                              <SidebarMenuSubItem key={item.title}>
+                                <SidebarMenuSubButton asChild isActive={location.pathname === item.url}>
+                                  <Link to={item.url}><item.icon /><span>{item.title}</span></Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  </SidebarMenu>
+                </SidebarGroup>
+              );
+            })}
           </SidebarContent>
           <SidebarFooter>
             <SidebarMenu><SidebarMenuItem>
