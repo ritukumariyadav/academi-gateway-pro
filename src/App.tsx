@@ -110,6 +110,7 @@ import AdminCertificates from "@/pages/admin/AdminCertificates";
 import AdminComplaints from "@/pages/admin/AdminComplaints";
 import AdminOnlineExams from "@/pages/admin/AdminOnlineExams";
 import AdminMessaging from "@/pages/admin/AdminMessaging";
+import AdminAccounting from "@/pages/admin/AdminAccounting";
 
 // Parent pages
 import ParentDashboard from "@/pages/parent/ParentDashboard";
