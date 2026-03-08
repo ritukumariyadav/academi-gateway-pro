@@ -131,20 +131,39 @@ const TeacherLayout = () => {
             </Breadcrumb>
             <div className="ml-auto flex items-center gap-3">
               <Link to="/student/dashboard">
-                <Button variant="ghost" size="icon">
+                <Button
+                  variant={
+                    location.pathname.startsWith("/student")
+                      ? "default"
+                      : "ghost"
+                  }
+                  size="icon"
+                >
                   <LayoutDashboard className="h-5 w-5" />
                 </Button>
               </Link>
 
               <Link to="/admin/dashboard">
-                <Button variant="ghost" size="icon">
+                <Button
+                  variant={
+                    location.pathname.startsWith("/admin") ? "default" : "ghost"
+                  }
+                  size="icon"
+                >
                   <Shield className="h-5 w-5" />
                 </Button>
               </Link>
 
               {/* teacher dashboard link */}
               <Link to="/teacher/dashboard">
-                <Button variant="ghost" size="icon">
+                <Button
+                  variant={
+                    location.pathname.startsWith("/teacher")
+                      ? "default"
+                      : "ghost"
+                  }
+                  size="icon"
+                >
                   <GraduationCap className="h-5 w-5" />
                 </Button>
               </Link>
