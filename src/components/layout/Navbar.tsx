@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, GraduationCap } from "lucide-react";
+import { Menu, ChevronDown, ChevronRight, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose,
+} from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import logo from "@/assets/logo.png";
 
 const navItems = [
@@ -28,8 +33,8 @@ const navItems = [
 ];
 
 const Navbar = () => {
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
@@ -99,48 +104,83 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Mobile toggle */}
-        <button className="lg:hidden p-2" onClick={() => setMobileOpen(!mobileOpen)}>
-          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="lg:hidden border-t bg-card animate-slide-in">
-          <div className="container mx-auto px-4 py-4 flex flex-col gap-2">
-            {navItems.map((item) => (
-              <div key={item.label}>
-                <Link
-                  to={item.path}
-                  onClick={() => setMobileOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-sm font-medium ${isActive(item.path) ? "bg-accent/10 text-accent" : "text-foreground"}`}
-                >
-                  {item.label}
-                </Link>
-                {item.children?.map((child) => (
-                  <Link
-                    key={child.path}
-                    to={child.path}
-                    onClick={() => setMobileOpen(false)}
-                    className="block pl-8 py-1.5 text-sm text-muted-foreground hover:text-accent"
-                  >
-                    {child.label}
-                  </Link>
+        {/* Mobile Sheet */}
+        <Sheet>
+          <SheetTrigger asChild className="lg:hidden">
+            <Button variant="ghost" size="icon">
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[300px] p-0 flex flex-col">
+            <SheetHeader className="p-4 pb-2">
+              <SheetTitle className="flex items-center gap-2">
+                <img src={logo} alt="Preston Academy" className="h-8 w-8" />
+                <div className="leading-tight text-left">
+                  <span className="font-display text-base font-bold">Preston Academy</span>
+                  <span className="block text-[10px] text-muted-foreground tracking-widest uppercase">Est. 1976</span>
+                </div>
+              </SheetTitle>
+            </SheetHeader>
+            <Separator />
+            <ScrollArea className="flex-1">
+              <div className="flex flex-col py-2">
+                {navItems.map((item) => (
+                  <div key={item.label}>
+                    {item.children ? (
+                      <>
+                        <button
+                          onClick={() => setMobileExpanded(mobileExpanded === item.label ? null : item.label)}
+                          className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors ${isActive(item.path) ? "bg-accent/10 text-accent" : "text-foreground hover:bg-muted"}`}
+                        >
+                          {item.label}
+                          <ChevronRight className={`h-4 w-4 transition-transform ${mobileExpanded === item.label ? "rotate-90" : ""}`} />
+                        </button>
+                        {mobileExpanded === item.label && (
+                          <div className="bg-muted/50">
+                            {item.children.map((child) => (
+                              <SheetClose asChild key={child.path}>
+                                <Link
+                                  to={child.path}
+                                  className={`block pl-8 pr-4 py-2.5 text-sm transition-colors ${isActive(child.path) ? "text-accent font-medium" : "text-muted-foreground hover:text-accent"}`}
+                                >
+                                  {child.label}
+                                </Link>
+                              </SheetClose>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <SheetClose asChild>
+                        <Link
+                          to={item.path}
+                          className={`block px-4 py-3 text-sm font-medium transition-colors ${isActive(item.path) ? "bg-accent/10 text-accent" : "text-foreground hover:bg-muted"}`}
+                        >
+                          {item.label}
+                        </Link>
+                      </SheetClose>
+                    )}
+                  </div>
                 ))}
               </div>
-            ))}
-            <div className="flex gap-2 mt-4">
-              <Link to="/apply-online" className="flex-1" onClick={() => setMobileOpen(false)}>
-                <Button className="w-full bg-accent text-accent-foreground">Apply Now</Button>
-              </Link>
-              <Link to="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
-                <Button variant="outline" className="w-full">Login</Button>
-              </Link>
+            </ScrollArea>
+            <Separator />
+            <div className="p-4 flex flex-col gap-2">
+              <SheetClose asChild>
+                <Link to="/apply-online">
+                  <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-semibold">Apply Now</Button>
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link to="/login">
+                  <Button variant="outline" className="w-full">Login</Button>
+                </Link>
+              </SheetClose>
             </div>
-          </div>
-        </div>
-      )}
+          </SheetContent>
+        </Sheet>
+      </div>
     </nav>
   );
 };
