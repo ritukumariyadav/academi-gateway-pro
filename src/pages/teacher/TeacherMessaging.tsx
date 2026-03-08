@@ -1,42 +1,43 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Send } from "lucide-react";
+import MessengerChat, { ChatContact, ChatMessage } from "@/components/chat/MessengerChat";
 
-const conversations = [
-  { id: 1, from: "Admin Office", subject: "Exam duty schedule", preview: "Please find attached your...", time: "1 hour ago", unread: true },
-  { id: 2, from: "Raj Kumar (Student)", subject: "Assignment query", preview: "Sir, regarding assignment 3...", time: "3 hours ago", unread: false },
-  { id: 3, from: "Dr. Brown (HOD)", subject: "Department meeting", preview: "Meeting scheduled for...", time: "1 day ago", unread: false },
+const contacts: ChatContact[] = [
+  { id: "admin", name: "Admin Office", initials: "AO", role: "Administration", lastMessage: "Exam duty roster has been shared", time: "30m", unread: 2, online: true },
+  { id: "s1", name: "Raj Kumar", initials: "RK", role: "Student — BCA 3rd Year", lastMessage: "Sir, regarding assignment 3...", time: "1h", unread: 1, online: true },
+  { id: "s2", name: "Priya Patel", initials: "PP", role: "Student — BCA 3rd Year", lastMessage: "Thank you for the feedback!", time: "2h", unread: 0, online: true },
+  { id: "t1", name: "Dr. Emily Brown", initials: "EB", role: "HOD — Physics Dept.", lastMessage: "Department meeting at 3 PM", time: "3h", unread: 0, online: false },
+  { id: "p1", name: "Mrs. Sharma", initials: "MS", role: "Parent of Rohan Sharma", lastMessage: "How is Rohan performing?", time: "5h", unread: 1, online: false },
+  { id: "t2", name: "Prof. James Wilson", initials: "JW", role: "Mathematics Dept.", lastMessage: "Shared the semester plan", time: "1d", unread: 0, online: false },
 ];
 
+const messagesMap: Record<string, ChatMessage[]> = {
+  admin: [
+    { id: "1", senderId: "admin", text: "Good morning! Please check the exam duty roster for next week.", time: "8:30 AM", status: "read" },
+    { id: "2", senderId: "teacher", text: "Received. I see I'm assigned to Hall 3 on Monday and Wednesday.", time: "8:45 AM", status: "read" },
+    { id: "3", senderId: "admin", text: "That's correct. Please reach 30 minutes before the exam starts.", time: "8:50 AM", status: "read" },
+    { id: "4", senderId: "admin", text: "Exam duty roster has been shared", time: "9:00 AM", status: "read" },
+  ],
+  s1: [
+    { id: "1", senderId: "s1", text: "Good afternoon sir. I have a doubt in Assignment 3, Question 5.", time: "2:00 PM", status: "read" },
+    { id: "2", senderId: "teacher", text: "Sure, which part are you stuck on?", time: "2:15 PM", status: "read" },
+    { id: "3", senderId: "s1", text: "The part about binary tree traversal. I'm not sure about the inorder approach.", time: "2:20 PM", status: "read" },
+    { id: "4", senderId: "teacher", text: "In inorder traversal, you visit left subtree first, then root, then right subtree. Try implementing it recursively first.", time: "2:30 PM", status: "read" },
+    { id: "5", senderId: "s1", text: "Sir, regarding assignment 3...", time: "3:00 PM", status: "read" },
+  ],
+  p1: [
+    { id: "1", senderId: "p1", text: "Hello sir, I wanted to ask about Rohan's recent test performance.", time: "4:00 PM", status: "read" },
+    { id: "2", senderId: "teacher", text: "Hello Mrs. Sharma. Rohan scored 78/100 in the mid-term. He's doing well overall.", time: "4:15 PM", status: "read" },
+    { id: "3", senderId: "p1", text: "How is Rohan performing?", time: "4:20 PM", status: "read" },
+  ],
+};
+
 const TeacherMessaging = () => (
-  <div className="space-y-6">
-    <h1 className="font-display text-2xl font-bold">Messages</h1>
-    <div className="grid lg:grid-cols-3 gap-6">
-      <Card className="lg:col-span-1">
-        <CardHeader><CardTitle>Inbox</CardTitle></CardHeader>
-        <CardContent className="space-y-2">
-          {conversations.map(c => (
-            <div key={c.id} className={`p-3 rounded-lg cursor-pointer hover:bg-muted/50 ${c.unread ? "bg-accent/5 border-l-2 border-accent" : ""}`}>
-              <div className="flex justify-between"><span className="font-medium text-sm">{c.from}</span><span className="text-xs text-muted-foreground">{c.time}</span></div>
-              <p className="text-sm font-medium mt-1">{c.subject}</p>
-              <p className="text-xs text-muted-foreground truncate">{c.preview}</p>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-      <Card className="lg:col-span-2">
-        <CardHeader><CardTitle>Compose</CardTitle></CardHeader>
-        <CardContent className="space-y-4">
-          <Input placeholder="To (name or email)" />
-          <Input placeholder="Subject" />
-          <Textarea placeholder="Write your message..." rows={6} />
-          <Button><Send className="h-4 w-4 mr-1" /> Send</Button>
-        </CardContent>
-      </Card>
-    </div>
-  </div>
+  <MessengerChat
+    contacts={contacts}
+    currentUserId="teacher"
+    currentUserName="Dr. Smith"
+    currentUserInitials="DS"
+    getMessages={(contactId) => messagesMap[contactId] || []}
+  />
 );
 
 export default TeacherMessaging;

@@ -1,57 +1,47 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { MessageSquare, Send, Users, Mail } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import MessengerChat, { ChatContact, ChatMessage } from "@/components/chat/MessengerChat";
 
-const conversations = [
-  { id: 1, from: "Dr. Smith", subject: "Lab equipment request", preview: "We need additional oscilloscopes for...", time: "2 hours ago", unread: true },
-  { id: 2, from: "Raj Kumar (Student)", subject: "Fee payment query", preview: "I have paid the fee but it shows...", time: "3 hours ago", unread: true },
-  { id: 3, from: "Prof. Johnson", subject: "Exam schedule conflict", preview: "The CS301 exam overlaps with...", time: "5 hours ago", unread: false },
-  { id: 4, from: "Parent — Mrs. Sharma", subject: "Daughter's attendance", preview: "Could you please check Priya's...", time: "1 day ago", unread: false },
-  { id: 5, from: "Mr. Kumar (Transport)", subject: "Route change request", preview: "Due to road construction, Route 2...", time: "1 day ago", unread: false },
+const contacts: ChatContact[] = [
+  { id: "t1", name: "Dr. Sarah Smith", initials: "SS", role: "HOD — Computer Science", lastMessage: "Lab equipment has been approved", time: "2m", unread: 3, online: true },
+  { id: "t2", name: "Prof. James Wilson", initials: "JW", role: "Mathematics Dept.", lastMessage: "Exam papers are ready for review", time: "15m", unread: 1, online: true },
+  { id: "t3", name: "Ms. Priya Sharma", initials: "PS", role: "Hindi Faculty", lastMessage: "Sent the updated syllabus", time: "1h", unread: 0, online: false },
+  { id: "s1", name: "Raj Kumar", initials: "RK", role: "Student — BCA 3rd Year", lastMessage: "Sir, regarding my fee receipt...", time: "2h", unread: 2, online: true },
+  { id: "p1", name: "Mrs. Anjali Gupta", initials: "AG", role: "Parent of Neha Gupta", lastMessage: "Thank you for the update", time: "3h", unread: 0, online: false },
+  { id: "t4", name: "Mr. Kumar Singh", initials: "KS", role: "Transport Manager", lastMessage: "Route 3 schedule updated", time: "5h", unread: 0, online: true },
+  { id: "t5", name: "Dr. Emily Brown", initials: "EB", role: "Physics Dept.", lastMessage: "Meeting rescheduled to 4 PM", time: "1d", unread: 0, online: false },
+  { id: "s2", name: "Anita Verma", initials: "AV", role: "Student — MBA 1st Year", lastMessage: "Assignment submitted, please check", time: "1d", unread: 0, online: false },
 ];
 
+const messagesMap: Record<string, ChatMessage[]> = {
+  t1: [
+    { id: "1", senderId: "t1", text: "Good morning! I wanted to discuss the lab equipment budget for next semester.", time: "9:00 AM", status: "read" },
+    { id: "2", senderId: "admin", text: "Sure, please send me the detailed requirement list.", time: "9:05 AM", status: "read" },
+    { id: "3", senderId: "t1", text: "I've shared the document via email. We need 5 new oscilloscopes and 3 spectrum analyzers.", time: "9:10 AM", status: "read" },
+    { id: "4", senderId: "admin", text: "Got it. I'll review with the finance team and approve by tomorrow.", time: "9:15 AM", status: "read" },
+    { id: "5", senderId: "t1", text: "That would be great. Also, the projector in Lab 3 needs replacement.", time: "9:20 AM", status: "read" },
+    { id: "6", senderId: "admin", text: "I'll add that to the maintenance request. Anything else?", time: "9:25 AM", status: "read" },
+    { id: "7", senderId: "t1", text: "Lab equipment has been approved", time: "10:30 AM", status: "read" },
+  ],
+  t2: [
+    { id: "1", senderId: "t2", text: "The midterm exam papers for Calculus II are ready.", time: "11:00 AM", status: "read" },
+    { id: "2", senderId: "admin", text: "Great! Please upload them to the exam portal by Thursday.", time: "11:10 AM", status: "read" },
+    { id: "3", senderId: "t2", text: "Exam papers are ready for review", time: "11:15 AM", status: "read" },
+  ],
+  s1: [
+    { id: "1", senderId: "s1", text: "Good afternoon sir. I paid my tuition fee online but haven't received a receipt.", time: "2:00 PM", status: "read" },
+    { id: "2", senderId: "admin", text: "Let me check with the accounts department. What's your student ID?", time: "2:10 PM", status: "read" },
+    { id: "3", senderId: "s1", text: "It's BCA-2023-045. The transaction was done yesterday.", time: "2:12 PM", status: "read" },
+    { id: "4", senderId: "s1", text: "Sir, regarding my fee receipt...", time: "2:30 PM", status: "read" },
+  ],
+};
+
 const AdminMessaging = () => (
-  <div className="space-y-6">
-    <h1 className="font-display text-2xl font-bold">Internal Messaging</h1>
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {[{ label: "Inbox", value: "12", icon: Mail }, { label: "Unread", value: "2", icon: MessageSquare }, { label: "Sent Today", value: "5", icon: Send }, { label: "Contacts", value: "348", icon: Users }].map((s, i) => (
-        <Card key={i}><CardContent className="p-4"><s.icon className="h-5 w-5 text-accent mb-2" /><p className="text-lg font-bold">{s.value}</p><p className="text-xs text-muted-foreground">{s.label}</p></CardContent></Card>
-      ))}
-    </div>
-    <div className="grid lg:grid-cols-3 gap-6">
-      <Card className="lg:col-span-1">
-        <CardHeader><CardTitle>Conversations</CardTitle></CardHeader>
-        <CardContent className="space-y-2">
-          {conversations.map(c => (
-            <div key={c.id} className={`p-3 rounded-lg cursor-pointer hover:bg-muted/50 ${c.unread ? "bg-accent/5 border-l-2 border-accent" : ""}`}>
-              <div className="flex justify-between items-start"><span className="font-medium text-sm">{c.from}</span><span className="text-xs text-muted-foreground">{c.time}</span></div>
-              <p className="text-sm font-medium mt-1">{c.subject}</p>
-              <p className="text-xs text-muted-foreground mt-0.5 truncate">{c.preview}</p>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-      <Card className="lg:col-span-2">
-        <CardHeader><CardTitle>Compose Message</CardTitle></CardHeader>
-        <CardContent className="space-y-4">
-          <Select><SelectTrigger><SelectValue placeholder="Select recipient type" /></SelectTrigger>
-            <SelectContent><SelectItem value="individual">Individual</SelectItem><SelectItem value="department">Department</SelectItem><SelectItem value="all-staff">All Staff</SelectItem><SelectItem value="all-students">All Students</SelectItem><SelectItem value="parents">All Parents</SelectItem></SelectContent>
-          </Select>
-          <Input placeholder="Recipient name or email" />
-          <Input placeholder="Subject" />
-          <Textarea placeholder="Type your message..." rows={5} />
-          <div className="flex gap-2">
-            <Button><Send className="h-4 w-4 mr-1" /> Send</Button>
-            <Button variant="outline">Save Draft</Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  </div>
+  <MessengerChat
+    contacts={contacts}
+    currentUserId="admin"
+    currentUserName="Admin"
+    currentUserInitials="AD"
+    getMessages={(contactId) => messagesMap[contactId] || []}
+  />
 );
 
 export default AdminMessaging;
