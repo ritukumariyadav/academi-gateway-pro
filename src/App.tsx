@@ -83,11 +83,12 @@ import AdminSettings from "@/pages/admin/AdminSettings";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
+  <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
         <Routes>
           {/* Public Routes */}
           <Route element={<PublicLayout />}>
