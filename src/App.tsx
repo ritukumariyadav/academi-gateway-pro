@@ -156,7 +156,10 @@ const App = () => (
             <Route path="/admin/courses" element={<AdminCourses />} />
             <Route path="/admin/departments" element={<AdminDepartments />} />
             <Route path="/admin/admissions" element={<AdminAdmissions />} />
+            <Route path="/admin/marksheets" element={<AdminMarksheets />} />
+            <Route path="/admin/syllabus" element={<AdminSyllabus />} />
             <Route path="/admin/notices" element={<AdminNotices />} />
+            <Route path="/admin/notifications" element={<AdminNotifications />} />
             <Route path="/admin/events" element={<AdminEvents />} />
             <Route path="/admin/gallery" element={<AdminGallery />} />
             <Route path="/admin/results" element={<AdminResults />} />
