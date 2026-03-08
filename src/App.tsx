@@ -42,6 +42,7 @@ import StudentProfile from "@/pages/student/StudentProfile";
 import StudentAttendance from "@/pages/student/StudentAttendance";
 import StudentResults from "@/pages/student/StudentResults";
 import StudentAssignments from "@/pages/student/StudentAssignments";
+import StudentSyllabus from "@/pages/student/StudentSyllabus";
 import StudentTimetable from "@/pages/student/StudentTimetable";
 import StudentFees from "@/pages/student/StudentFees";
 import StudentLibrary from "@/pages/student/StudentLibrary";
@@ -53,10 +54,13 @@ import TeacherDashboard from "@/pages/dashboard/TeacherDashboard";
 import TeacherProfile from "@/pages/teacher/TeacherProfile";
 import TeacherAttendance from "@/pages/teacher/TeacherAttendance";
 import TeacherAssignments from "@/pages/teacher/TeacherAssignments";
+import TeacherMarksheets from "@/pages/teacher/TeacherMarksheets";
 import TeacherResults from "@/pages/teacher/TeacherResults";
 import TeacherSchedule from "@/pages/teacher/TeacherSchedule";
 import TeacherNotices from "@/pages/teacher/TeacherNotices";
+import TeacherNotifications from "@/pages/teacher/TeacherNotifications";
 import TeacherStudents from "@/pages/teacher/TeacherStudents";
+import TeacherSyllabus from "@/pages/teacher/TeacherSyllabus";
 
 // Admin pages
 import AdminDashboard from "@/pages/dashboard/AdminDashboard";
@@ -66,6 +70,9 @@ import AdminCourses from "@/pages/admin/AdminCourses";
 import AdminDepartments from "@/pages/admin/AdminDepartments";
 import AdminAdmissions from "@/pages/admin/AdminAdmissions";
 import AdminNotices from "@/pages/admin/AdminNotices";
+import AdminNotifications from "@/pages/admin/AdminNotifications";
+import AdminMarksheets from "@/pages/admin/AdminMarksheets";
+import AdminSyllabus from "@/pages/admin/AdminSyllabus";
 import AdminEvents from "@/pages/admin/AdminEvents";
 import AdminGallery from "@/pages/admin/AdminGallery";
 import AdminResults from "@/pages/admin/AdminResults";
@@ -118,6 +125,7 @@ const App = () => (
             <Route path="/student/attendance" element={<StudentAttendance />} />
             <Route path="/student/results" element={<StudentResults />} />
             <Route path="/student/assignments" element={<StudentAssignments />} />
+            <Route path="/student/syllabus" element={<StudentSyllabus />} />
             <Route path="/student/timetable" element={<StudentTimetable />} />
             <Route path="/student/fees" element={<StudentFees />} />
             <Route path="/student/library" element={<StudentLibrary />} />
@@ -131,9 +139,12 @@ const App = () => (
             <Route path="/teacher/profile" element={<TeacherProfile />} />
             <Route path="/teacher/attendance" element={<TeacherAttendance />} />
             <Route path="/teacher/assignments" element={<TeacherAssignments />} />
+            <Route path="/teacher/marksheets" element={<TeacherMarksheets />} />
             <Route path="/teacher/results" element={<TeacherResults />} />
             <Route path="/teacher/schedule" element={<TeacherSchedule />} />
+            <Route path="/teacher/syllabus" element={<TeacherSyllabus />} />
             <Route path="/teacher/notices" element={<TeacherNotices />} />
+            <Route path="/teacher/notifications" element={<TeacherNotifications />} />
             <Route path="/teacher/students" element={<TeacherStudents />} />
           </Route>
 
@@ -145,7 +156,10 @@ const App = () => (
             <Route path="/admin/courses" element={<AdminCourses />} />
             <Route path="/admin/departments" element={<AdminDepartments />} />
             <Route path="/admin/admissions" element={<AdminAdmissions />} />
+            <Route path="/admin/marksheets" element={<AdminMarksheets />} />
+            <Route path="/admin/syllabus" element={<AdminSyllabus />} />
             <Route path="/admin/notices" element={<AdminNotices />} />
+            <Route path="/admin/notifications" element={<AdminNotifications />} />
             <Route path="/admin/events" element={<AdminEvents />} />
             <Route path="/admin/gallery" element={<AdminGallery />} />
             <Route path="/admin/results" element={<AdminResults />} />

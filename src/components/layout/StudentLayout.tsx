@@ -45,6 +45,7 @@ const navItems = [
   { title: "Attendance", url: "/student/attendance", icon: Calendar },
   { title: "Results", url: "/student/results", icon: FileText },
   { title: "Assignments", url: "/student/assignments", icon: ClipboardList },
+  { title: "Syllabus", url: "/student/syllabus", icon: BookOpen },
   { title: "Timetable", url: "/student/timetable", icon: BookOpen },
   { title: "Fees", url: "/student/fees", icon: DollarSign },
   { title: "Library", url: "/student/library", icon: Library },
