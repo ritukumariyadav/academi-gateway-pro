@@ -30,6 +30,11 @@ import AcademicCalendar from "@/pages/AcademicCalendar";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsConditions from "@/pages/TermsConditions";
 import NotFound from "@/pages/NotFound";
+import CourseDetail from "@/pages/CourseDetail";
+import DepartmentDetail from "@/pages/DepartmentDetail";
+import FacultyDetail from "@/pages/FacultyDetail";
+import NoticeDetail from "@/pages/NoticeDetail";
+import EventDetail from "@/pages/EventDetail";
 
 // Student pages
 import StudentDashboard from "@/pages/dashboard/StudentDashboard";
@@ -83,13 +88,18 @@ const App = () => (
             <Route path="/message/principal" element={<PrincipalMessage />} />
             <Route path="/vision-mission" element={<VisionMission />} />
             <Route path="/courses" element={<Courses />} />
+            <Route path="/courses/:id" element={<CourseDetail />} />
             <Route path="/departments" element={<Departments />} />
+            <Route path="/departments/:id" element={<DepartmentDetail />} />
             <Route path="/faculty" element={<Faculty />} />
+            <Route path="/faculty/:id" element={<FacultyDetail />} />
             <Route path="/admission" element={<Admission />} />
             <Route path="/apply-online" element={<ApplyOnline />} />
             <Route path="/academic-calendar" element={<AcademicCalendar />} />
             <Route path="/notices" element={<Notices />} />
+            <Route path="/notices/:id" element={<NoticeDetail />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/events/:id" element={<EventDetail />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/testimonials" element={<Testimonials />} />
             <Route path="/faq" element={<FAQ />} />
