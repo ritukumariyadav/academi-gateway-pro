@@ -1,8 +1,16 @@
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  LayoutDashboard, User, Calendar, Upload, FileText, BookOpen, Bell, Users,
-  LogOut, GraduationCap, Shield, Send, ClipboardList, Award, MessageSquare,
-  Monitor, Library,
+  LayoutDashboard,
+  User,
+  Calendar,
+  FileText,
+  DollarSign,
+  Bell,
+  MessageSquare,
+  LogOut,
+  GraduationCap,
+  Shield,
+  Users,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
@@ -14,38 +22,19 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/co
 import { Button } from "../ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-const mainNav = [
-  { title: "Dashboard", url: "/teacher/dashboard", icon: LayoutDashboard },
-  { title: "Profile", url: "/teacher/profile", icon: User },
-  { title: "Schedule", url: "/teacher/schedule", icon: BookOpen },
-  { title: "Students", url: "/teacher/students", icon: Users },
-  { title: "Attendance", url: "/teacher/attendance", icon: Calendar },
+const navItems = [
+  { title: "Dashboard", url: "/parent/dashboard", icon: LayoutDashboard },
+  { title: "Child Progress", url: "/parent/progress", icon: FileText },
+  { title: "Attendance", url: "/parent/attendance", icon: Calendar },
+  { title: "Fees", url: "/parent/fees", icon: DollarSign },
+  { title: "Messages", url: "/parent/messages", icon: MessageSquare },
+  { title: "Complaints", url: "/parent/complaints", icon: Bell },
 ];
 
-const academicNav = [
-  { title: "Assignments", url: "/teacher/assignments", icon: Upload },
-  { title: "Marksheets", url: "/teacher/marksheets", icon: ClipboardList },
-  { title: "Results", url: "/teacher/results", icon: FileText },
-  { title: "Syllabus", url: "/teacher/syllabus", icon: BookOpen },
-  { title: "Exams", url: "/teacher/exams", icon: Calendar },
-  { title: "Report Cards", url: "/teacher/report-cards", icon: Award },
-  { title: "Online Quizzes", url: "/teacher/online-exams", icon: Monitor },
-];
-
-const otherNav = [
-  { title: "Library", url: "/teacher/library", icon: Library },
-  { title: "Notices", url: "/teacher/notices", icon: Bell },
-  { title: "Notifications", url: "/teacher/notifications", icon: Send },
-  { title: "Messages", url: "/teacher/messages", icon: MessageSquare },
-  { title: "Complaints", url: "/teacher/complaints", icon: MessageSquare },
-];
-
-const allNav = [...mainNav, ...academicNav, ...otherNav];
-
-const TeacherLayout = () => {
+const ParentLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const currentPage = allNav.find(i => i.url === location.pathname)?.title || "Dashboard";
+  const currentPage = navItems.find(i => i.url === location.pathname)?.title || "Dashboard";
 
   return (
     <SidebarProvider>
@@ -54,10 +43,10 @@ const TeacherLayout = () => {
           <SidebarHeader>
             <SidebarMenu><SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild>
-                <Link to="/teacher/dashboard">
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"><GraduationCap className="size-4" /></div>
+                <Link to="/parent/dashboard">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"><Users className="size-4" /></div>
                   <div className="flex flex-col gap-0.5 leading-none">
-                    <span className="font-display font-semibold">Faculty Portal</span>
+                    <span className="font-display font-semibold">Parent Portal</span>
                     <span className="text-xs text-sidebar-foreground/60">Preston Academy</span>
                   </div>
                 </Link>
@@ -65,24 +54,18 @@ const TeacherLayout = () => {
             </SidebarMenuItem></SidebarMenu>
           </SidebarHeader>
           <SidebarContent>
-            {[
-              { label: "Overview", items: mainNav },
-              { label: "Academic", items: academicNav },
-              { label: "Other", items: otherNav },
-            ].map(group => (
-              <SidebarGroup key={group.label}>
-                <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
-                <SidebarGroupContent><SidebarMenu>
-                  {group.items.map(item => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild isActive={location.pathname === item.url} tooltip={item.title}>
-                        <Link to={item.url}><item.icon /><span>{item.title}</span></Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu></SidebarGroupContent>
-              </SidebarGroup>
-            ))}
+            <SidebarGroup>
+              <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+              <SidebarGroupContent><SidebarMenu>
+                {navItems.map(item => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={location.pathname === item.url} tooltip={item.title}>
+                      <Link to={item.url}><item.icon /><span>{item.title}</span></Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu></SidebarGroupContent>
+            </SidebarGroup>
           </SidebarContent>
           <SidebarFooter>
             <SidebarMenu><SidebarMenuItem>
@@ -103,7 +86,7 @@ const TeacherLayout = () => {
               <Link to="/parent/dashboard"><Button variant={location.pathname.startsWith("/parent") ? "default" : "ghost"} size="icon"><Users className="h-5 w-5" /></Button></Link>
               <ThemeToggle />
               <Bell className="h-5 w-5 text-muted-foreground" />
-              <div className="h-8 w-8 rounded-full bg-accent flex items-center justify-center text-accent-foreground text-sm font-bold">T</div>
+              <div className="h-8 w-8 rounded-full bg-accent flex items-center justify-center text-accent-foreground text-sm font-bold">P</div>
             </div>
           </header>
           <main className="flex-1 p-4 md:p-6"><Outlet /></main>
@@ -113,4 +96,4 @@ const TeacherLayout = () => {
   );
 };
 
-export default TeacherLayout;
+export default ParentLayout;
